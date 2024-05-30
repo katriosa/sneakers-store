@@ -1,9 +1,11 @@
 <template>
-  <div class="grid grid-cols-4 gap-5">
+  <div class="grid grid-cols-4 gap-5 mt-10">
     <CardItem
-      title="Мужские Кроссовки Nike Blazer Mid Suede"
-      imageUrl="/sneakers/sneakers-1.jpg"
-      :price="1205"
+      v-for="item in items"
+      :key="item.id"
+      :title="item.title"
+      :imageUrl="item.imageUrl"
+      :price="item.price"
       :is-added="false"
       :is-favorite="false"
       :onClickAdd="onClickAdd"
@@ -14,6 +16,10 @@
 
 <script setup>
 import CardItem from './CardItem.vue'
+
+defineProps({
+  items: Array
+})
 
 const onClickAdd = () => {
   alert('Add!')
