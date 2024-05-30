@@ -1,9 +1,11 @@
 <script setup>
 import MainHeader from './components/MainHeader.vue'
 import CardList from './components/CardList.vue'
+import CartDrawer from './components/CartDrawer.vue'
 </script>
 
 <template>
+  <CartDrawer />
   <div class="bg-white w-4/5 m-auto mt-14 rounded-xl shadow-xl">
     <MainHeader />
 
