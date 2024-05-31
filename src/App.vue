@@ -6,7 +6,10 @@
     <div class="p-10">
       <div class="flex justify-between items-center">
         <h2 class="text-3xl font-bold mb-8">Все кроссовки</h2>
-        <SearchSortControls />
+        <SearchSortControls
+          :onChangeSelect="onChangeSelect"
+          :onChangeSearchInput="onChangeSearchInput"
+        />
       </div>
       <CardList :items="items" />
     </div>
@@ -14,7 +17,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, reactive, onMounted, watch } from 'vue'
 import axios from 'axios'
 
 import MainHeader from './components/MainHeader.vue'
@@ -24,12 +27,36 @@ import SearchSortControls from './components/SearchSortControls.vue'
 
 const items = ref([])
 
-onMounted(async () => {
+const filters = reactive({
+  sortBy: 'title',
+  searchQuery: ''
+})
+
+const onChangeSelect = (event) => {
+  filters.sortBy = event.target.value
+}
+const onChangeSearchInput = (event) => {
+  filters.searchQuery = event.target.value
+}
+
+const fetchItems = async () => {
   try {
-    const { data } = await axios.get('https://0e996b8e15f4603f.mokky.dev/items')
+    const params = {
+      sortBy: filters.sortBy
+    }
+
+    if (filters.searchQuery) {
+      params.title = `*${filters.searchQuery}*`
+    }
+
+    const { data } = await axios.get(`https://0e996b8e15f4603f.mokky.dev/items`, { params })
     items.value = data
   } catch (err) {
     console.error(err)
   }
-})
+}
+
+onMounted(fetchItems)
+
+watch(filters, fetchItems)
 </script>
