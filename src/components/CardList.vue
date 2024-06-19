@@ -3,13 +3,14 @@
     <CardItem
       v-for="item in items"
       :key="item.id"
+      :id="item.id"
       :title="item.title"
       :imageUrl="item.imageUrl"
       :price="item.price"
       :is-added="false"
-      :is-favorite="false"
+      :isFavorite="item.isFavorite"
       :onClickAdd="onClickAdd"
-      :onClickFavorite="onClickFavorite"
+      :onClickFavorite="() => addToFavorite(item)"
     />
   </div>
 </template>
@@ -18,13 +19,22 @@
 import CardItem from './CardItem.vue'
 
 defineProps({
-  items: Array
+  items: Array,
+  addToFavorite: Function
 })
 
 const onClickAdd = () => {
   alert('Add!')
 }
-const onClickFavorite = () => {
-  alert('Like!')
-}
+// const onClickFavorite = () => {
+//   alert('Like!')
+// }
+
+// const onClickFavorite = () => {
+//   const obj = {
+//     ...props,
+//     parentId: props.items.id
+//   }
+//   props.addToFavorite(obj)
+// }
 </script>
