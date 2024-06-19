@@ -1,7 +1,7 @@
 <template>
-  <!-- <Drawer /> -->
+  <Drawer v-if="drawerOpen" />
   <div class="bg-white w-4/5 m-auto mt-14 rounded-xl shadow-xl">
-    <MainHeader />
+    <MainHeader @openDrawer="openDrawer" />
 
     <div class="p-10">
       <div class="flex justify-between items-center">
@@ -17,15 +17,23 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, watch } from 'vue'
+import { ref, reactive, onMounted, watch, provide } from 'vue'
 import axios from 'axios'
 
 import MainHeader from './components/MainHeader.vue'
 import CardList from './components/CardList.vue'
 import SearchSortControls from './components/SearchSortControls.vue'
-// import Drawer from './components/drawer/Drawer.vue'
+import Drawer from './components/drawer/Drawer.vue'
 
 const items = ref([])
+
+const drawerOpen = ref(false)
+const closeDrawer = () => {
+  drawerOpen.value = false
+}
+const openDrawer = () => {
+  drawerOpen.value = true
+}
 
 const filters = reactive({
   sortBy: 'title',
@@ -60,9 +68,6 @@ const fetchFavorites = async () => {
 }
 
 const addToFavorite = async (item) => {
-  //   item.isFavorite = !item.isFavorite
-  //   console.log(item)
-  // }
   try {
     if (!item.isFavorite) {
       const obj = {
@@ -109,4 +114,9 @@ onMounted(async () => {
 })
 
 watch(filters, fetchItems)
+
+provide('cartActions', {
+  closeDrawer,
+  openDrawer
+})
 </script>
