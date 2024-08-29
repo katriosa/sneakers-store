@@ -3,7 +3,11 @@
   <div class="fixed top-0 right-0 bg-white w-96 h-full z-20 p-8 flex flex-col">
     <DrawerHead />
     <CartList />
-    <OrderSummary />
+    <OrderSummary
+      :totalPrice="totalPrice"
+      :vatPrice="vatPrice"
+      :buttonDisabled="cartButtonDisabled"
+    />
   </div>
 </template>
 
@@ -11,4 +15,10 @@
 import DrawerHead from './DrawerHead.vue'
 import CartList from './CartList.vue'
 import OrderSummary from './OrderSummary.vue'
+
+defineProps({
+  totalPrice: Number,
+  vatPrice: Number,
+  cartButtonDisabled: Boolean
+})
 </script>

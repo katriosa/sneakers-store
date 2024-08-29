@@ -1,7 +1,12 @@
 <template>
-  <Drawer v-if="drawerOpen" />
+  <Drawer
+    v-if="drawerOpen"
+    :totalPrice="totalPrice"
+    :vatPrice="vatPrice"
+    :cartButtonDisabled="cartButtonDisabled"
+  />
   <div class="bg-white w-4/5 m-auto mt-14 rounded-xl shadow-xl">
-    <MainHeader @openDrawer="openDrawer" />
+    <MainHeader :totalPrice="totalPrice" @openDrawer="openDrawer" />
 
     <div class="p-10">
       <div class="flex justify-between items-center">
@@ -11,13 +16,13 @@
           :onChangeSearchInput="onChangeSearchInput"
         />
       </div>
-      <CardList :items="items" :addToFavorite="addToFavorite" />
+      <CardList :items="items" :addToFavorite="addToFavorite" :addToCart="onClickAddPlus" />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, watch, provide } from 'vue'
+import { ref, reactive, onMounted, watch, provide, computed } from 'vue'
 import axios from 'axios'
 
 import MainHeader from './components/MainHeader.vue'
@@ -27,7 +32,16 @@ import Drawer from './components/drawer/Drawer.vue'
 
 const items = ref([])
 
+const cart = ref([])
 const drawerOpen = ref(false)
+const isCreatingOrder = ref(false)
+
+const totalPrice = computed(() => cart.value.reduce((acc, item) => acc + item.price, 0))
+const vatPrice = computed(() => Math.round((totalPrice.value * 5) / 100))
+const cartIsEmpty = computed(() => cart.value.length === 0)
+
+const cartButtonDisabled = computed(() => isCreatingOrder.value || cartIsEmpty.value)
+
 const closeDrawer = () => {
   drawerOpen.value = false
 }
@@ -35,11 +49,46 @@ const openDrawer = () => {
   drawerOpen.value = true
 }
 
+const addToCart = (item) => {
+  cart.value.push(item)
+  item.isAdded = true
+}
+
+const removeFromCart = (item) => {
+  cart.value.splice(cart.value.indexOf(item), 1)
+  item.isAdded = false
+}
+
+const createOrder = async () => {
+  try {
+    isCreatingOrder.value = true
+    const { data } = await axios.post(`https://0e996b8e15f4603f.mokky.dev/orders`, {
+      items: cart.value,
+      totalPrice: totalPrice.value
+    })
+
+    cart.value = []
+
+    return data
+  } catch (err) {
+    console.log(err)
+  } finally {
+    isCreatingOrder.value = false
+  }
+}
+
 const filters = reactive({
   sortBy: 'title',
   searchQuery: ''
 })
 
+const onClickAddPlus = (item) => {
+  if (!item.isAdded) {
+    addToCart(item)
+  } else {
+    removeFromCart(item)
+  }
+}
 const onChangeSelect = (event) => {
   filters.sortBy = event.target.value
 }
@@ -115,8 +164,19 @@ onMounted(async () => {
 
 watch(filters, fetchItems)
 
-provide('cartActions', {
-  closeDrawer,
-  openDrawer
+watch(cart, () => {
+  items.value = items.value.map((item) => ({
+    ...item,
+    isAdded: false
+  }))
 })
+
+provide('cart', {
+  cart,
+  closeDrawer,
+  openDrawer,
+  addToCart,
+  removeFromCart
+})
+provide('createOrder', createOrder)
 </script>

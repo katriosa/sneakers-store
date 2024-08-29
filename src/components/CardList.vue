@@ -7,10 +7,10 @@
       :title="item.title"
       :imageUrl="item.imageUrl"
       :price="item.price"
-      :is-added="false"
+      :isAdded="item.isAdded"
       :isFavorite="item.isFavorite"
-      :onClickAdd="onClickAdd"
       :onClickFavorite="() => addToFavorite(item)"
+      :onClickAdd="() => addToCart(item)"
     />
   </div>
 </template>
@@ -20,21 +20,7 @@ import CardItem from './CardItem.vue'
 
 defineProps({
   items: Array,
-  addToFavorite: Function
+  addToFavorite: Function,
+  addToCart: Function
 })
-
-const onClickAdd = () => {
-  alert('Add!')
-}
-// const onClickFavorite = () => {
-//   alert('Like!')
-// }
-
-// const onClickFavorite = () => {
-//   const obj = {
-//     ...props,
-//     parentId: props.items.id
-//   }
-//   props.addToFavorite(obj)
-// }
 </script>
