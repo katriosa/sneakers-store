@@ -9,8 +9,8 @@
       :price="item.price"
       :isAdded="item.isAdded"
       :isFavorite="item.isFavorite"
-      :onClickFavorite="() => addToFavorite(item)"
-      :onClickAdd="() => addToCart(item)"
+      :onClickFavorite="isFavorites ? null : () => addToFavorite(item)"
+      :onClickAdd="isFavorites ? null : () => addToCart(item)"
     />
   </div>
 </template>
@@ -21,6 +21,7 @@ import CardItem from './CardItem.vue'
 defineProps({
   items: Array,
   addToFavorite: Function,
-  addToCart: Function
+  addToCart: Function,
+  isFavorites: Boolean
 })
 </script>
