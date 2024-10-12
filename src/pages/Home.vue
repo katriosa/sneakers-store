@@ -12,7 +12,7 @@
 <script setup>
 import axios from 'axios'
 import { inject, ref, reactive, onMounted, watch } from 'vue'
-
+import debounce from 'lodash.debounce'
 import CardList from '../components/CardList.vue'
 import SearchSortControls from '../components/SearchSortControls.vue'
 
@@ -30,9 +30,9 @@ const onClickAddPlus = (item) => {
 const onChangeSelect = (event) => {
   filters.sortBy = event.target.value
 }
-const onChangeSearchInput = (event) => {
+const onChangeSearchInput = debounce((event) => {
   filters.searchQuery = event.target.value
-}
+}, 300)
 
 const addToFavorite = async (item) => {
   try {

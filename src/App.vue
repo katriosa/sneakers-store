@@ -15,7 +15,6 @@ import { ref, watch, provide, computed } from 'vue'
 import MainHeader from './components/MainHeader.vue'
 import Drawer from './components/drawer/Drawer.vue'
 
-// Cart (start)
 const cart = ref([])
 const drawerOpen = ref(false)
 
@@ -38,8 +37,6 @@ const removeFromCart = (item) => {
   cart.value.splice(cart.value.indexOf(item), 1)
   item.isAdded = false
 }
-
-// Cart (end)
 
 watch(
   cart,
