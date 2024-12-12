@@ -1,14 +1,22 @@
-# sneakers
+# Sneakers
 
-This template should help get you started developing with Vue 3 in Vite.
+This project is an online sneaker store that allows users to filter products by name and price and add products to the shopping cart and favorites.
+The application built with **Vue 3**, TailwindCSS for styling and the MOKKY.DEV service for data storage.
 
-## Recommended IDE Setup
+## Tech Stack
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+- Vue 3 (Composition API)
+- Vue Router
+- TailwindCSS
+- Axios
+- @formkit/auto-animate
+- ESLint
+- Prettier
 
-## Customize configuration
+---
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+![sneakers-vue-screen](https://github.com/user-attachments/assets/e439792f-8482-4fbb-a116-ff499f2e1ed6)
+
 
 ## Project Setup
 
